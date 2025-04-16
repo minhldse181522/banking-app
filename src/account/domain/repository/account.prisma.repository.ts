@@ -18,7 +18,8 @@ export class PrismaAccountRepository implements AccountRepository {
     return new BankAccount(
       createdAccount.ownerId,
       createdAccount.balance,
-      createdAccount.id,
+      BigInt(createdAccount.id),
+      createdAccount.createdAt,
     );
   }
 

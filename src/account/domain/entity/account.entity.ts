@@ -3,6 +3,7 @@ export class BankAccount {
     public readonly ownerId: string,
     private balance: number = 0,
     public readonly id?: bigint,
+    public readonly createdAt?: Date,
   ) {}
 
   deposit(amount: number): void {
