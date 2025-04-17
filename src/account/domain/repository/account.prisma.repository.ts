@@ -29,3 +29,4 @@ export class PrismaAccountRepository implements AccountRepository {
     return new BankAccount(data.ownerId, data.balance, data.id);
   }
 }
+
