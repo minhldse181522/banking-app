@@ -1,0 +1,22 @@
+model User {
+  id           BigInt    @id @default(autoincrement())
+
+  keycloakId   String    @unique
+  fullName     String    @map("full_name") @db.VarChar(50)
+  email        String    @map("email") @db.VarChar(50)
+  phone        String    @map("phone") @db.VarChar(50)
+  bod          DateTime  @map("bod") @db.Timestamptz(3)
+
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  createdBy   String?   @map("created_by") @db.VarChar(36)
+  updatedAt   DateTime? @updatedAt @map("modified_at") @db.Timestamptz(3)
+  updatedBy   String?   @map("modified_by") @db.VarChar(36)
+
+  bankingAccount BankingAccount[]
+  transaction    Transaction[]
+  auditLog       AuditLog[]
+  loginAttempt   LoginAttempt[]
+  beneficiary    Beneficiary[]
+
+  @@map("bs_user")
+}
