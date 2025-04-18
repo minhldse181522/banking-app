@@ -1,0 +1,27 @@
+model BankingAccount {
+  id            BigInt    @id @default(autoincrement())
+
+  userId        BigInt         @map("user_id")
+  accountType   AccountType    @map("account_type") 
+  accountStatus AccountStatus  @map("account_status") 
+  cardType      CardType       @map("card_type")
+  currencyId    BigInt         @map("currency_id")
+  balance       Decimal        @map("balance") @default(0)
+  freezeReason  String?        @map("freeze_reason") @db.VarChar(100)
+
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  createdBy   String?   @map("created_by") @db.VarChar(36)
+  updatedAt   DateTime? @updatedAt @map("modified_at") @db.Timestamptz(3)
+  updatedBy   String?   @map("modified_by") @db.VarChar(36)
+
+  user              User      @relation(fields: [userId], references: [id], onUpdate: Cascade)
+  currency          Currency  @relation(fields: [currencyId], references: [id], onUpdate: Cascade)
+
+  interestHistory   InterestHistory[]
+  freezeLog         FreezeLog[]
+  fromTxns          Transaction[]       @relation("from_account")
+  toTxns            Transaction[]       @relation("to_account")
+  beneficiary       Beneficiary[]       @relation("banking_beneficiary")
+
+  @@map("bs_banking_account")
+}

@@ -1,0 +1,24 @@
+model Transaction {
+  id                   BigInt                @id @default(autoincrement())
+
+  transactionId        BigInt                @map("transaction_id") @unique
+  userId               BigInt                @map("user_id")
+  fromAccountId        BigInt                @map("from_account_id") 
+  toAccountId          BigInt                @map("to_account_id") 
+  transactionType      TransactionType       @map("transaction_type")
+  transactionStatus    TransactionStatus     @map("transaction_status")
+  amount               Decimal               @map("amount")
+  fee                  Decimal               @map("fee")
+  description          String?               @map("description") @db.VarChar(100)
+
+  createdAt            DateTime              @default(now()) @map("created_at") @db.Timestamptz(3)
+  createdBy            String?               @map("created_by") @db.VarChar(36)
+  updatedAt            DateTime?             @updatedAt @map("modified_at") @db.Timestamptz(3)
+  updatedBy            String?               @map("modified_by") @db.VarChar(36)
+
+  user         User               @relation(fields: [userId], references: [id], onUpdate: Cascade)
+  fromAccount  BankingAccount     @relation("from_account", fields: [fromAccountId], references: [id], onUpdate: Cascade)
+  toAccount    BankingAccount     @relation("to_account", fields: [toAccountId], references: [id], onUpdate: Cascade)
+
+  @@map("bs_transaction")
+}

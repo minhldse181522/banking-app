@@ -13,3 +13,33 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum AccountType {
+  SAVINGS
+  PAYMENT
+  LOAN
+}
+
+enum AccountStatus {
+  SAVINGS
+  PAYMENT
+  LOAN
+}
+
+enum CardType {
+  ATM
+  VISA
+  MASTER
+}
+
+enum TransactionType {
+  TRANSFER
+  DEPOSIT
+  WITHDRAW
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
