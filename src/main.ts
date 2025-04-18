@@ -15,8 +15,8 @@ function setupSwagger(nestApp: INestApplication) {
   const options = new DocumentBuilder()
     .setTitle('Banking API Documentation')
     .setDescription('The Banking API documentation with Domain-Driven Design')
-    .setVersion('1.0');
-  // .addBearerAuth();
+    .setVersion('1.0')
+    .addBearerAuth();
 
   const document = SwaggerModule.createDocument(nestApp, options.build());
   const serializedDocument = serializeBigInt(document);
