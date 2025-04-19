@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { ValidateUserUseCase } from '../../application/use-cases/validate-user.usecase';
 import { CurrentUser } from '../decorator/current-user.decorator';
@@ -18,11 +18,14 @@ export class AuthController {
   ) {}
 
   @UseGuards(KeyCloakAuthGuard)
+  @ApiBearerAuth()
   @Get()
   async getUser(@CurrentUser() user: User): Promise<UserEntity | null> {
     return this.ValidateUser.execute(user.keycloakId);
   }
 
+  @UseGuards(KeyCloakAuthGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiCreatedResponse({ type: CreateUserResponseDto })
   async createNewUser(@Body() dto: CreateUserRequestDto): Promise<{
