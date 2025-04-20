@@ -2,13 +2,14 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs'; // nếu có dùng
 import { PrismaService } from 'src/shared/config/prisma.config';
-import { JwtKeycloakStrategy } from './infrastructure/strategy/keycloak.strategy';
-import { ValidateUserUseCase } from './application/use-cases/validate-user.usecase';
-import { KeyCloakAuthGuard } from './presentation/guard/keycloak-auth.guard';
-import { AuthController } from './presentation/controller/auth.controller';
-import { PrismaUserRepository } from './domain/repository/user.prisma.repository';
+import { LoginUserUseCase } from './application/use-cases/login-user.usecase';
+import { RegisterUserUseCase } from './application/use-cases/register-user.usecase';
 import { USER_REPOSITORY } from './auth.di.tokens';
-import { CreateUserUseCase } from './application/use-cases/create-user.usecase';
+import { PrismaUserRepository } from './domain/repository/user.prisma.repository';
+import { JwtKeycloakStrategy } from './infrastructure/strategy/keycloak.strategy';
+import { AuthController } from './presentation/controller/auth.controller';
+import { KeyCloakAuthGuard } from './presentation/guard/keycloak-auth.guard';
+import { KeycloakService } from './infrastructure/keycloak.service';
 
 const httpControllers = [AuthController];
 
@@ -17,11 +18,11 @@ const cliControllers = [];
 const messageControllers = [];
 
 // Use cases
-const commandHandlers = [ValidateUserUseCase, CreateUserUseCase];
+const commandHandlers = [RegisterUserUseCase, LoginUserUseCase];
 const queryHandlers = []; // nếu có query use-cases
 
 // Services (Infrastructure)
-const services = [];
+const services = [KeycloakService];
 
 // Strategy, Guard, etc.
 const authSecurity = [JwtKeycloakStrategy, KeyCloakAuthGuard];

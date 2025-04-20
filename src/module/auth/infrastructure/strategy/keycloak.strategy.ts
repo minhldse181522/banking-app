@@ -4,6 +4,7 @@ import { Strategy } from 'passport-custom';
 import jwksRsa from 'jwks-rsa';
 import * as jwt from 'jsonwebtoken';
 import { keycloakConfig } from 'src/shared/config/keycloak.config';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtKeycloakStrategy extends PassportStrategy(
@@ -14,8 +15,17 @@ export class JwtKeycloakStrategy extends PassportStrategy(
     super();
   }
 
-  async validate(token: string): Promise<any> {
+  async validate(req: Request): Promise<any> {
     try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        throw new UnauthorizedException(
+          'Missing or invalid authorization header',
+        );
+      }
+
+      const token = authHeader.replace('Bearer ', '');
+
       const decoded: any = jwt.decode(token, { complete: true });
       const kid = decoded?.header?.kid;
 
@@ -29,6 +39,7 @@ export class JwtKeycloakStrategy extends PassportStrategy(
       const payload = jwt.verify(token, publicKey, {
         algorithms: ['RS256'],
       }) as any;
+      console.dir(payload, { depth: null });
 
       return {
         keycloakId: payload.sub,
@@ -37,7 +48,7 @@ export class JwtKeycloakStrategy extends PassportStrategy(
         roles: payload.realm_access?.roles || [],
       };
     } catch (error) {
-      console.log(error);
+      console.error('JWT Validation Error:', error);
       throw new UnauthorizedException('Invalid token');
     }
   }

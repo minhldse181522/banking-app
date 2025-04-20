@@ -12,3 +12,5 @@ export const keycloakConfig = {
   username: get('KEYCLOAK_ADMIN_USERNAME').required().asString(),
   password: get('KEYCLOAK_ADMIN_PASSWORD').required().asString(),
 };
+
+console.log('[Keycloak URL]', keycloakConfig.url);
