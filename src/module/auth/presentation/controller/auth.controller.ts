@@ -1,41 +1,44 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '@prisma/client';
-import { ValidateUserUseCase } from '../../application/use-cases/validate-user.usecase';
-import { CurrentUser } from '../decorator/current-user.decorator';
-import { KeyCloakAuthGuard } from '../guard/keycloak-auth.guard';
-import { UserEntity } from '../../domain/entity/user.entity';
-import { CreateUserUseCase } from '../../application/use-cases/create-user.usecase';
-import { CreateUserRequestDto } from '../dto/create-user.dto';
-import { CreateUserResponseDto } from '../dto/create-user.response.dto';
+import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { LoginUserUseCase } from '../../application/use-cases/login-user.usecase';
+import { RegisterUserUseCase } from '../../application/use-cases/register-user.usecase';
+import { LoginUserRequestDto } from '../dto/login-user.dto';
+import { RegisterUserDto } from '../dto/register-user.dto';
+import { UserResponseDto } from '../dto/user.response.dto';
 
 @ApiTags('User')
 @Controller('user')
 export class AuthController {
   constructor(
-    private readonly ValidateUser: ValidateUserUseCase,
-    private readonly createUser: CreateUserUseCase,
+    private readonly registerUser: RegisterUserUseCase,
+    private readonly loginUser: LoginUserUseCase,
   ) {}
 
-  @UseGuards(KeyCloakAuthGuard)
-  @ApiBearerAuth()
-  @Get()
-  async getUser(@CurrentUser() user: User): Promise<UserEntity | null> {
-    return this.ValidateUser.execute(user.keycloakId);
+  @Post('register')
+  async register(@Body() dto: RegisterUserDto): Promise<{
+    message: string;
+    data: UserResponseDto;
+  }> {
+    const user = await this.registerUser.execute(dto);
+    return {
+      message: 'User register successfully',
+      data: user,
+    };
   }
 
-  @UseGuards(KeyCloakAuthGuard)
-  @ApiBearerAuth()
-  @Post()
-  @ApiCreatedResponse({ type: CreateUserResponseDto })
-  async createNewUser(@Body() dto: CreateUserRequestDto): Promise<{
+  @Post('login')
+  async login(@Body() dto: LoginUserRequestDto): Promise<{
     message: string;
-    data: CreateUserResponseDto;
+    data: {
+      user: UserResponseDto;
+      access_token: string;
+      refresh_token: string;
+    };
   }> {
-    const user = await this.createUser.execute(dto);
+    const data = await this.loginUser.execute(dto);
     return {
-      message: 'User created successfully',
-      data: user,
+      message: 'User login successfully',
+      data,
     };
   }
 }

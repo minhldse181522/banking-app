@@ -2,7 +2,9 @@ model User {
   id           BigInt    @id @default(autoincrement())
 
   keycloakId   String    @unique
-  fullName     String    @map("full_name") @db.VarChar(50)
+  userName     String    @map("user_name") @db.VarChar(50)
+  firstName    String    @map("first_name") @db.VarChar(50)
+  lastName     String    @map("last_name") @db.VarChar(50)
   email        String    @map("email") @db.VarChar(50)
   phone        String    @map("phone") @db.VarChar(50)
   bod          DateTime  @map("bod") @db.Timestamptz(3)
