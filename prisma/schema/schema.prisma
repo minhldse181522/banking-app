@@ -21,9 +21,9 @@ enum AccountType {
 }
 
 enum AccountStatus {
-  SAVINGS
-  PAYMENT
-  LOAN
+  ACTIVE
+  FROZEN
+  CLOSED
 }
 
 enum CardType {
