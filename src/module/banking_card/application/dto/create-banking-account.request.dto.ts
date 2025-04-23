@@ -2,7 +2,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
@@ -12,12 +11,6 @@ export enum AccountType {
   SAVINGS = 'SAVINGS',
   PAYMENT = 'PAYMENT',
   LOAN = 'LOAN',
-}
-
-export enum AccountStatus {
-  ACTIVE = 'ACTIVE',
-  FROZEN = 'FROZEN',
-  CLOSED = 'CLOSED',
 }
 
 export enum CardType {
@@ -32,7 +25,7 @@ export class CreateBankingAccountRequestDto {
     description: 'userID',
   })
   @IsNotEmpty()
-  userId: bigint;
+  userId: string;
 
   @ApiProperty({
     example: 'XXXX-XXXX-XXXX-XXXX',
@@ -53,15 +46,6 @@ export class CreateBankingAccountRequestDto {
   accountType: AccountType;
 
   @ApiProperty({
-    example: 'ACTIVE',
-    description: 'Account Status',
-    enum: AccountStatus,
-  })
-  @IsEnum(AccountStatus)
-  @IsNotEmpty()
-  accountStatus: AccountStatus;
-
-  @ApiProperty({
     example: 'VISA',
     description: 'Card Type',
     enum: CardType,
@@ -71,22 +55,13 @@ export class CreateBankingAccountRequestDto {
   cardType: CardType;
 
   @ApiProperty({
-    example: 1,
+    example: '1',
     description: 'currency ID',
   })
   @IsNotEmpty()
-  currencyId: bigint;
-
-  @ApiProperty({
-    example: '0',
-    description: 'Balance',
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  balance: number;
+  currencyId: string;
 
   @ApiPropertyOptional({
-    example: 'ABC',
     description: 'Freeze Reason',
   })
   @IsString()
@@ -95,7 +70,6 @@ export class CreateBankingAccountRequestDto {
   frezzeReason?: string | null;
 
   @ApiPropertyOptional({
-    example: 'Mile',
     description: 'Created By',
   })
   @IsString()

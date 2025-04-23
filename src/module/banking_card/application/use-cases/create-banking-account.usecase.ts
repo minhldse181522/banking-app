@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { BankingAccountRepositoryPort } from '../../domain/repository/banking-account.repository';
 import { BANKING_CARD_REPOSITORY } from '../../banking_card.di.tokens';
 import { BankingAccountEntity } from '../../domain/entity/banking-account.entity';
@@ -14,11 +14,17 @@ export class CreateBankingAccountUseCase {
   async execute(
     dto: CreateBankingAccountRequestDto,
   ): Promise<BankingAccountEntity> {
+    const cardNumberRegex = /^\d{4}-\d{4}-\d{4}-\d{4}$/;
+    if (!cardNumberRegex.test(dto.cardNumber)) {
+      throw new BadRequestException(
+        'Card Number must be in format XXXX-XXXX-XXXX-XXXX',
+      );
+    }
     const newBankingAccount = new BankingAccountEntity(
       dto.userId,
       dto.cardNumber,
       dto.accountType,
-      dto.accountStatus,
+      'ACTIVE',
       dto.cardType,
       dto.currencyId,
       0,

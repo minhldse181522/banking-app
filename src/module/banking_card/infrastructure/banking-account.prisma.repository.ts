@@ -14,24 +14,24 @@ export class PrismaBankingAccountRepository
   ): Promise<BankingAccountEntity> {
     const result = await this.prismaService.bankingAccount.create({
       data: {
-        userId: account.userId,
+        userId: parseInt(account.userId),
         cardNumber: account.cardNumber,
         accountType: account.accountType,
         accountStatus: account.accountStatus,
         cardType: account.cardType,
-        currencyId: account.currencyId,
+        currencyId: parseInt(account.currencyId),
         balance: account.balance,
         freezeReason: account.freezeReason,
         createdBy: account.createdBy,
       },
     });
     return new BankingAccountEntity(
-      result.userId,
+      result.userId.toString(),
       result.cardNumber,
       result.accountType,
       result.accountStatus,
       result.cardType,
-      result.currencyId,
+      result.currencyId.toString(),
       result.balance.toNumber(),
       result.freezeReason,
       result.createdBy,
