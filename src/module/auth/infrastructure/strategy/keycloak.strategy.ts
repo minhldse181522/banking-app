@@ -17,6 +17,7 @@ export class JwtKeycloakStrategy extends PassportStrategy(
 
   async validate(req: Request): Promise<any> {
     try {
+      console.log('Headers:', req.headers);
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         throw new UnauthorizedException(
