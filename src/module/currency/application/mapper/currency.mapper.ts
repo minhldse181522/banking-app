@@ -12,7 +12,7 @@ export class CurrencyMapper {
       rateToBase: entity.rateToBase,
       createdAt: new Date(),
       createdBy: entity.createdBy || null,
-      updatedAt: new Date(),
+      updatedAt: entity.updatedAt || null,
       updatedBy: entity.updatedBy || null,
     };
   }

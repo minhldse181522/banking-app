@@ -5,6 +5,7 @@ import { GetCurrencyUseCase } from './application/use-cases/get-currency.usecase
 import { CURRENCY_REPOSITORY } from './currency.di.tokens';
 import { PrismaCurrencyRepository } from './infrastructure/currency.prisma.repository';
 import { CurrencyController } from './presentation/controller/currency.controller';
+import { CreateCurrencyUseCase } from './application/use-cases/create-currency.usecase';
 
 const httpControllers = [CurrencyController];
 
@@ -13,7 +14,7 @@ const cliControllers = [];
 const messageControllers = [];
 
 // Use cases
-const commandHandlers = [GetCurrencyUseCase];
+const commandHandlers = [GetCurrencyUseCase, CreateCurrencyUseCase];
 const queryHandlers = []; // nếu có query use-cases
 
 // Services (Infrastructure)
